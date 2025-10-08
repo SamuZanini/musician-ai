@@ -59,7 +59,7 @@ export default function Home() {
       <div className="relative flex items-center min-h-screen">
         <div
           className="flex flex-col items-center justify-center w-1/3 h-screen gap-6 pl-12"
-          style={{ zIndex: 30 }}
+          style={{ zIndex: 10 }}
         >
           <img
             src="/images/logo-png.png"
