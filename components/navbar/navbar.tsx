@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { ModeToggle } from "@/components/mode-toggle"
-import { AuroraText } from "./magicui/aurora-text"
+import { ModeToggle } from "@/components/tema/mode-toggle";
+import { AuroraText } from "../magicui/aurora-text";
 
 function BlurHeader() {
   return (
@@ -15,7 +15,9 @@ function BlurHeader() {
       <div className="pointer-events-none absolute inset-0 z-[7] h-[20vh] backdrop-blur-[4px] [mask-image:linear-gradient(0deg,transparent_75%,#000_87.5%,#000_100%,transparent_112.5%)]"></div>
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
         <a className="z-[10]" href="/">
-          <AuroraText className="text-xl font-bold">create-chico-app</AuroraText>
+          <AuroraText className="text-xl font-bold">
+            create-chico-app
+          </AuroraText>
         </a>
         <div className="z-[10] flex items-center gap-4">
           <a
@@ -30,7 +32,7 @@ function BlurHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }
 
 export function Navbar() {
@@ -38,5 +40,5 @@ export function Navbar() {
     <div className="relative w-full">
       <BlurHeader />
     </div>
-  )
-} 
+  );
+}
