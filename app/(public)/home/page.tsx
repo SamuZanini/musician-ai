@@ -5,6 +5,7 @@ import { AnimatedShinyTextDemo } from "@/components/botao/botao";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import { useTheme } from "next-themes";
 import { useSidebar } from "@/components/ui/sidebar";
+import NavbarFinal from "@/components/navbar";
 
 export default function Home() {
   const { theme } = useTheme();
@@ -26,9 +27,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full relative">
+      {/* Navbar */}
+      <NavbarFinal />
       {/* Background image */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 bg-no-repeat h-screen w-screen overflow-hidden"
         style={{
           backgroundImage: "url('/images/maestro.jpg')",
           backgroundSize: "cover",

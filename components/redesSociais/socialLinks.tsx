@@ -1,24 +1,23 @@
 "use client";
-import {
-  CircleArrowRight,
-  Instagram,
-  Youtube,
-  Twitter,
-  Linkedin,
-} from "lucide-react";
+import { CircleArrowRight, Linkedin, Github } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const SOCIALS_LINKS = [
+type SocialLink = {
+  key: string;
+  icon: React.ReactNode;
+  link: string;
+};
+
+type SocialLinksArrowAnimationProps = {
+  links?: SocialLink[];
+};
+
+const DEFAULT_SOCIALS_LINKS: SocialLink[] = [
   {
-    key: "youtube",
-    icon: <Youtube />,
-    link: "/",
-  },
-  {
-    key: "twitter",
-    icon: <Twitter />,
+    key: "github",
+    icon: <Github />,
     link: "/",
   },
   {
@@ -26,22 +25,21 @@ const SOCIALS_LINKS = [
     icon: <Linkedin />,
     link: "/",
   },
-  {
-    key: "instagram",
-    icon: <Instagram />,
-    link: "/",
-  },
 ];
 
-const SocialLinksArrowAnimation = () => {
+const SocialLinksArrowAnimation = ({
+  links = DEFAULT_SOCIALS_LINKS,
+}: SocialLinksArrowAnimationProps) => {
   const [hovered, setHover] = useState<string>("");
 
   return (
     <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-      {SOCIALS_LINKS.map((l, index) => (
+      {links.map((l, index) => (
         <Link
           key={index}
           href={l.link}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex bg-gradient-to-br from-gray-500 hover:from-gray-400 to-50% to-neutral-900 p-px rounded-xl overflow-hidden"
           onMouseEnter={() => setHover(l.key)}
           onMouseLeave={() => setHover("")}

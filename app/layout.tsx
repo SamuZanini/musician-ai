@@ -29,12 +29,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-no-repeat h-screen w-screen overflow-hidden`}
-        style={{
-          backgroundImage: "url('/images/maestro.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ProviderWrapper>
           <SidebarProvider defaultOpen={false}>
