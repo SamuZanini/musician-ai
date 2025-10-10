@@ -6,15 +6,21 @@ import { AuroraText } from "@/components/magicui/aurora-text";
 import { useTheme } from "next-themes";
 import { useSidebar } from "@/components/ui/sidebar";
 import NavbarFinal from "@/components/navbar";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { theme } = useTheme();
   const { open, openMobile } = useSidebar();
   const [mounted, setMounted] = React.useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleGetStartedClick = () => {
+    router.push("/pricing");
+  };
 
   const gradient =
     theme === "dark"
@@ -72,7 +78,7 @@ export default function Home() {
           <h1 className="font-bold text-7xl font-italianno mb-2">#Dô</h1>
           <p className="text-5xl font-italianno">Your Online Music Teacher</p>
           <div className="w-full -mt-25">
-            <AnimatedShinyTextDemo />
+            <AnimatedShinyTextDemo onClick={handleGetStartedClick} />
           </div>
         </div>
       </div>
