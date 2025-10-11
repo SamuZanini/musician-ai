@@ -4,13 +4,11 @@ import * as React from "react";
 import { AnimatedShinyTextDemo } from "@/components/botao/botao";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import { useTheme } from "next-themes";
-import { useSidebar } from "@/components/ui/sidebar";
 import NavbarFinal from "@/components/navbar";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { theme } = useTheme();
-  const { open, openMobile } = useSidebar();
   const [mounted, setMounted] = React.useState(false);
   const router = useRouter();
 
@@ -43,14 +41,6 @@ export default function Home() {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      />
-
-      {/* Overlay with blur effect */}
-      <div
-        className={`absolute inset-0 transition-all duration-300 ${
-          open || openMobile ? "backdrop-blur-md bg-black/10" : ""
-        }`}
-        style={{ zIndex: 20 }}
       />
 
       {/* Gradient overlay */}

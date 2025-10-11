@@ -60,12 +60,16 @@ export function AppSidebar() {
             <ModeToggle enableDirectToggle />
           </SidebarHeader>
           <SidebarHeader>
-            <img src="/images/logo-png.png" alt="logo-png" />
+            <a href="/home">
+              <img src="/images/logo-png.png" alt="logo-png" />
+            </a>
           </SidebarHeader>
           <SidebarHeader>
-            <h1 className="font-bold text-6xl flex justify-center font-italianno">
-              #Dô
-            </h1>
+            <a href="/home">
+              <h1 className="font-bold text-6xl flex justify-center font-italianno">
+                #Dô
+              </h1>
+            </a>
           </SidebarHeader>
           <SidebarGroupContent>
             <SidebarMenu>

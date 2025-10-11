@@ -9,7 +9,6 @@ interface AnimatedShinyTextDemoProps {
 
 export function AnimatedShinyTextDemo({ onClick }: AnimatedShinyTextDemoProps) {
   const handleClick = () => {
-    console.log("Evento de clique recebido no botão");
     onClick?.();
   };
 

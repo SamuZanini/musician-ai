@@ -1,10 +1,12 @@
-import { Navbar } from "@/components/navbar/navbar";
+// import Navbar from "@/components/navbar/navbar";
 import ProviderWrapper from "@/providers/provider-wrapper";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { LoginButton } from "@/components/botao/botao-login";
+import { ClientLayout } from "./client-layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,20 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ProviderWrapper>
-          <SidebarProvider defaultOpen={false}>
-            <div className="flex min-h-screen w-full">
-              <AppSidebar />
-              <main className="flex-1 flex flex-col">
-                <div
-                  className="fixed top-6 z-[100] transition-all duration-300"
-                  style={{ left: "1.5rem" }}
-                >
-                  <SidebarTrigger className="h-12 w-12 translate-x-0 data-[state=expanded]:translate-x-64 transition-transform duration-300" />
-                </div>
-                {children}
-              </main>
-            </div>
-          </SidebarProvider>
+          <ClientLayout>{children}</ClientLayout>
         </ProviderWrapper>
       </body>
     </html>
