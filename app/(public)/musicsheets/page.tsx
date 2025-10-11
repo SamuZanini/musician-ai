@@ -8,7 +8,6 @@ export default function MusicSheets() {
     <div>
       <NavbarFinal />
       <MusicSheetSelectAccordion />
-      <div>in work</div>
     </div>
   );
 }
