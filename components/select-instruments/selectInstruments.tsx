@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { motion } from "motion/react";
 
 export function SelectAccordionDemo() {
   const [selectedInstrument, setSelectedInstrument] = useState("");
@@ -31,7 +32,12 @@ export function SelectAccordionDemo() {
   };
 
   return (
-    <div className="flex h-screen">
+    <motion.div
+      initial={{ opacity: 0, y: 200 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.0 }}
+      className="flex h-screen"
+    >
       {/* Accordion à esquerda */}
       <div className="w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
@@ -194,6 +200,6 @@ export function SelectAccordionDemo() {
           <Button className="mt-4">Select Instrument</Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

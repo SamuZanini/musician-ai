@@ -5,12 +5,18 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { motion } from "motion/react";
 
 export default function Login() {
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Background musical instruments with neon effect */}
-      <div className="absolute inset-0 z-0">
+      <motion.div
+        initial={{ opacity: 0, y: 200 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0 }}
+        className="absolute inset-0 z-0"
+      >
         {/* Accordion - bottom left */}
         <div className="absolute bottom-20 left-10 opacity-30">
           <Image
@@ -87,9 +93,14 @@ export default function Login() {
             className="filter drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]"
           />
         </div>
-      </div>
+      </motion.div>
 
-      <div className="relative z-10 flex min-h-screen">
+      <motion.div
+        initial={{ opacity: 0, y: 200 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0 }}
+        className="relative z-10 flex min-h-screen"
+      >
         {/* Left side - Login Form */}
         <div className="flex-1 flex items-center justify-center p-8">
           <Card className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl p-8 rounded-xl">
@@ -228,7 +239,7 @@ export default function Login() {
             />
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

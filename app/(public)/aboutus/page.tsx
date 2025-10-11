@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Highlighter } from "@/components/ui/highlighter";
 import { useTheme } from "next-themes";
 import { useSidebar } from "@/components/ui/sidebar";
+import { motion } from "motion/react";
 
 export default function AboutUs() {
   const { theme } = useTheme();
@@ -61,8 +62,17 @@ export default function AboutUs() {
         style={{ zIndex: 20 }}
       />
 
-      <NavbarFinal />
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 200 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0 }}
+      >
+        <NavbarFinal />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 200 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.5 }}
         className="flex flex-col items-center justify-center h-screen gap-8 relative"
         style={{ zIndex: 10 }}
       >
@@ -110,7 +120,7 @@ export default function AboutUs() {
             <SocialLinksArrowAnimation links={hugoLinks} />
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

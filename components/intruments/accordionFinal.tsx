@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { motion } from "motion/react";
 
 export function AccordionDemo() {
   const [selectedInstrument, setSelectedInstrument] = useState("");
@@ -33,7 +34,12 @@ export function AccordionDemo() {
     <div className="flex h-screen">
       {/* Accordion à esquerda */}
       <div className="w-1/2 flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
+        <motion.div
+          initial={{ opacity: 0, y: 200 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.0 }}
+          className="w-full max-w-md"
+        >
           <Accordion
             type="single"
             collapsible
@@ -162,14 +168,24 @@ export function AccordionDemo() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </div>
+        </motion.div>
       </div>
 
       {/* Linha separadora vertical */}
-      <div className="w-px bg-gray-300 h-3/4 self-center"></div>
+      <motion.div
+        initial={{ opacity: 0, y: 200 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0 }}
+        className="w-px bg-gray-300 h-3/4 self-center"
+      ></motion.div>
 
       {/* Área das imagens à direita */}
-      <div className="w-1/2 p-6 flex items-center justify-center">
+      <motion.div
+        initial={{ opacity: 0, y: 200 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0 }}
+        className="w-1/2 p-6 flex items-center justify-center"
+      >
         <div className="relative">
           <img
             src={
@@ -189,7 +205,7 @@ export function AccordionDemo() {
             className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg transition-all duration-300 ease-in-out"
           />
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

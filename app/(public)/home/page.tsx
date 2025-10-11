@@ -6,6 +6,7 @@ import { AuroraText } from "@/components/magicui/aurora-text";
 import { useTheme } from "next-themes";
 import NavbarFinal from "@/components/navbar";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 export default function Home() {
   const { theme } = useTheme();
@@ -60,16 +61,39 @@ export default function Home() {
           className="flex flex-col items-center justify-center w-1/3 h-screen gap-6 pl-12"
           style={{ zIndex: 10 }}
         >
-          <img
-            src="/images/logo-png.png"
-            alt="logo-png"
-            className="w-56 h-56 mb-2"
-          />
-          <h1 className="font-bold text-7xl font-italianno mb-2">#Dô</h1>
-          <p className="text-5xl font-italianno">Your Online Music Teacher</p>
-          <div className="w-full -mt-25">
+          <motion.div
+            initial={{ opacity: 0, y: 200 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.0 }}
+          >
+            <img
+              src="/images/logo-png.png"
+              alt="logo-png"
+              className="w-56 h-56 mb-2"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 200 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5 }}
+          >
+            <h1 className="font-bold text-7xl font-italianno mb-2">#Dô</h1>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 200 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2.0 }}
+          >
+            <p className="text-5xl font-italianno">Your Online Music Teacher</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 200 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 2.5 }}
+            className="w-full -mt-25"
+          >
             <AnimatedShinyTextDemo onClick={handleGetStartedClick} />
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
