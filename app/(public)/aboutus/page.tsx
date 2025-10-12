@@ -39,12 +39,12 @@ export default function AboutUs() {
     {
       key: "github",
       icon: <Github />,
-      link: "https://github.com/hugo-santos",
+      link: "https://github.com/HugOtavioS",
     },
     {
       key: "linkedin",
       icon: <Linkedin />,
-      link: "https://github.com/HugOtavioS",
+      link: "https://www.linkedin.com/in/hugotavios/",
     },
   ];
 
@@ -59,7 +59,10 @@ export default function AboutUs() {
         className={`absolute inset-0 transition-all duration-300 ${
           open || openMobile ? "backdrop-blur-md bg-black/10" : ""
         }`}
-        style={{ zIndex: 20 }}
+        style={{
+          zIndex: open || openMobile ? 20 : -1,
+          pointerEvents: open || openMobile ? "auto" : "none",
+        }}
       />
 
       <motion.div
@@ -90,7 +93,10 @@ export default function AboutUs() {
             ignite passion.
           </Highlighter>{" "}
         </p>
-        <div className="flex gap-20 items-center justify-center">
+        <div
+          className="flex gap-20 items-center justify-center relative"
+          style={{ zIndex: 30 }}
+        >
           <div className="flex flex-col items-center gap-4">
             <Avatar className="w-70 h-70">
               <AvatarImage src="/images/samuel.jpeg" />

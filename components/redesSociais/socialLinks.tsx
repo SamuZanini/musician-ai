@@ -1,8 +1,7 @@
 "use client";
 import { CircleArrowRight, Linkedin, Github } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import React, { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 
 type SocialLink = {
   key: string;
@@ -32,15 +31,23 @@ const SocialLinksArrowAnimation = ({
 }: SocialLinksArrowAnimationProps) => {
   const [hovered, setHover] = useState<string>("");
 
+  const handleClick = (url: string) => {
+    console.log("Link clicked:", url);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-      {links.map((l, index) => (
-        <Link
-          key={index}
-          href={l.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex bg-gradient-to-br from-gray-500 hover:from-gray-400 to-50% to-neutral-900 p-px rounded-xl overflow-hidden"
+    <div
+      className="flex flex-wrap justify-center gap-4 md:gap-6 relative"
+      style={{ zIndex: 50 }}
+    >
+      {links.map((l) => (
+        <button
+          type="button"
+          key={l.key}
+          onClick={() => handleClick(l.link)}
+          className="flex bg-gradient-to-br from-gray-500 hover:from-gray-400 to-50% to-neutral-900 p-px rounded-xl overflow-hidden cursor-pointer relative"
+          style={{ zIndex: 51 }}
           onMouseEnter={() => setHover(l.key)}
           onMouseLeave={() => setHover("")}
         >
@@ -77,7 +84,7 @@ const SocialLinksArrowAnimation = ({
               )}
             </AnimatePresence>
           </div>
-        </Link>
+        </button>
       ))}
     </div>
   );
