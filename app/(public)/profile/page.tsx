@@ -6,7 +6,7 @@ export default function Profile() {
   return (
     <div>
       <NavbarFinal />
-      <div>in work</div>
+      <div className="flex items-center justify-center h-screen">in work</div>
     </div>
   );
 }
