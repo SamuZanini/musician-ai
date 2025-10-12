@@ -230,7 +230,7 @@ export default function Profile() {
 
       case "profile-picture":
         return (
-          <div className="flex w-full">
+          <div className="flex w-full h-full items-center">
             {/* Perfil à esquerda */}
             <div className="w-1/3 flex flex-col items-center justify-center">
               <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center overflow-hidden">
