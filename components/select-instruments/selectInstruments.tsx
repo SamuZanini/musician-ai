@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -12,6 +12,21 @@ import { motion } from "motion/react";
 
 export function SelectAccordionDemo() {
   const [selectedInstrument, setSelectedInstrument] = useState("");
+
+  // Carregar instrumento selecionado do localStorage
+  useEffect(() => {
+    const savedInstrument = localStorage.getItem("selectedInstrument");
+    if (savedInstrument) {
+      setSelectedInstrument(savedInstrument);
+    }
+  }, []);
+
+  // Função para salvar instrumento selecionado
+  const handleSelectInstrument = () => {
+    if (selectedInstrument) {
+      localStorage.setItem("selectedInstrument", selectedInstrument);
+    }
+  };
 
   const instrumentImages = {
     "item-1": "/images/intrumento-violino.png",
@@ -173,7 +188,7 @@ export function SelectAccordionDemo() {
       </div>
 
       {/* Linha separadora vertical */}
-      <div className="w-px bg-gray-300 h-3/4 self-center"></div>
+      <div className="w-px bg-gray-300 h-3/4 self-center" />
 
       {/* Área das imagens à direita */}
       <div className="w-1/2 p-6 flex flex-col items-center justify-center gap-6">
@@ -197,7 +212,9 @@ export function SelectAccordionDemo() {
           />
         </div>
         {selectedInstrument && (
-          <Button className="mt-4">Select Instrument</Button>
+          <Button className="mt-4" onClick={handleSelectInstrument}>
+            Select Instrument
+          </Button>
         )}
       </div>
     </motion.div>

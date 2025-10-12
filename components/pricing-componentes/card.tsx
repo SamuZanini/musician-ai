@@ -26,6 +26,17 @@ export function PricingCard() {
   const currentPrices = prices[period];
   const periodText = period === "month" ? "month" : "year";
 
+  // Função para salvar plano selecionado
+  const handlePlanSelection = (plan: "copper" | "silver" | "gold") => {
+    const selectedPlan = {
+      plan,
+      period,
+      price: currentPrices[plan],
+      periodText,
+    };
+    localStorage.setItem("selectedPlan", JSON.stringify(selectedPlan));
+  };
+
   return (
     <ScrollArea className="h-screen w-full">
       <div className="flex flex-col items-center min-h-screen w-full">
@@ -50,6 +61,7 @@ export function PricingCard() {
               type="button"
               className="my-4 flex w-80 cursor-pointer flex-col items-stretch rounded-[16px] border-0 bg-[#B87333] p-2 md:my-8 md:p-4"
               aria-label="View invite F7RA"
+              onClick={() => handlePlanSelection("copper")}
               style={{
                 transformStyle: "preserve-3d",
                 transform: "none",
@@ -85,6 +97,7 @@ export function PricingCard() {
               type="button"
               className="my-4 flex w-80 cursor-pointer flex-col items-stretch rounded-[16px] border-0 bg-[#C0C0C0] p-2 md:my-8 md:p-4"
               aria-label="View invite F7RA"
+              onClick={() => handlePlanSelection("silver")}
               style={{
                 transformStyle: "preserve-3d",
                 transform: "none",
@@ -120,6 +133,7 @@ export function PricingCard() {
               type="button"
               className="my-4 flex w-80 cursor-pointer flex-col items-stretch rounded-[16px] border-0 bg-[#FFD700] p-2 md:my-8 md:p-4"
               aria-label="View invite F7RA"
+              onClick={() => handlePlanSelection("gold")}
               style={{
                 transformStyle: "preserve-3d",
                 transform: "none",
