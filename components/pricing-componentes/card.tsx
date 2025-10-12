@@ -6,9 +6,13 @@ import TextComponent from "@/components/text-rotate/text-rotate-componente";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PricingTab from "@/components/tab/tab-price";
 import { useState } from "react";
+import { useAuth } from "@/providers/auth-provider";
+import { useRouter } from "next/navigation";
 
 export function PricingCard() {
   const [period, setPeriod] = useState<"month" | "year">("month");
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
   const prices = {
     month: {
@@ -28,6 +32,13 @@ export function PricingCard() {
 
   // Função para salvar plano selecionado
   const handlePlanSelection = (plan: "copper" | "silver" | "gold") => {
+    // Se não estiver logado, redireciona para login
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+
+    // Se estiver logado, salva o plano selecionado
     const selectedPlan = {
       plan,
       period,

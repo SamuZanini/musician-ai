@@ -21,6 +21,7 @@ import {
   Mail,
   Lock,
   Settings,
+  Pencil,
 } from "lucide-react";
 import { CometCard } from "@/components/ui/comet-card";
 
@@ -35,6 +36,9 @@ export default function Profile() {
     price: number;
     periodText: string;
   } | null>(null);
+  const [userName, setUserName] = useState("Fulano");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [tempName, setTempName] = useState("Fulano");
 
   // Carregar instrumento selecionado do localStorage
   useEffect(() => {
@@ -48,7 +52,31 @@ export default function Profile() {
     if (savedPlan) {
       setSelectedPlan(JSON.parse(savedPlan));
     }
+
+    // Carregar nome do usuário do localStorage
+    const savedName = localStorage.getItem("userName");
+    if (savedName) {
+      setUserName(savedName);
+      setTempName(savedName);
+    }
   }, []);
+
+  // Funções para editar nome
+  const handleEditName = () => {
+    setIsEditingName(true);
+    setTempName(userName);
+  };
+
+  const handleSaveName = () => {
+    setUserName(tempName);
+    localStorage.setItem("userName", tempName);
+    setIsEditingName(false);
+  };
+
+  const handleCancelEdit = () => {
+    setTempName(userName);
+    setIsEditingName(false);
+  };
 
   const instrumentImages = {
     "item-1": "/images/violin-star.jpg", // Violin
@@ -170,10 +198,14 @@ export default function Profile() {
           <div className="flex w-full h-full items-center">
             {/* Perfil à esquerda */}
             <div className="w-1/3 flex flex-col items-center justify-center">
-              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center">
-                <User className="w-20 h-20 text-muted-foreground" />
+              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/images/profile.jpg"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Fulano</h2>
+              <h2 className="text-2xl font-bold text-foreground">{userName}</h2>
             </div>
 
             {/* Card da Assinatura */}
@@ -201,10 +233,58 @@ export default function Profile() {
           <div className="flex w-full">
             {/* Perfil à esquerda */}
             <div className="w-1/3 flex flex-col items-center justify-center">
-              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center">
-                <User className="w-20 h-20 text-muted-foreground" />
+              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/images/profile.jpg"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Fulano</h2>
+
+              {/* Nome editável */}
+              <div className="flex flex-col items-center gap-2">
+                {isEditingName ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <Input
+                      value={tempName}
+                      onChange={(e) => setTempName(e.target.value)}
+                      className="text-center text-2xl font-bold bg-input border-border text-foreground"
+                      autoFocus
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={handleSaveName}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleCancelEdit}
+                        className="border-border text-foreground hover:bg-muted"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-bold text-foreground">
+                      {userName}
+                    </h2>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={handleEditName}
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Bento Grid de Estatísticas */}
@@ -301,10 +381,14 @@ export default function Profile() {
         return (
           <div className="flex h-full">
             <div className="flex flex-col items-center justify-center w-1/3">
-              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center">
-                <User className="w-20 h-20 text-muted-foreground" />
+              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/images/profile.jpg"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Fulano</h2>
+              <h2 className="text-2xl font-bold text-foreground">{userName}</h2>
             </div>
             <div className="flex-1 flex flex-col justify-center px-8">
               <div className="space-y-6">
@@ -368,10 +452,14 @@ export default function Profile() {
         return (
           <div className="flex h-full">
             <div className="flex flex-col items-center justify-center w-1/3">
-              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center">
-                <User className="w-20 h-20 text-muted-foreground" />
+              <div className="w-100 h-100 rounded-full bg-muted mb-4 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/images/profile.jpg"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Fulano</h2>
+              <h2 className="text-2xl font-bold text-foreground">{userName}</h2>
             </div>
             <div className="flex-1 flex flex-col justify-center px-8">
               <div className="space-y-6">

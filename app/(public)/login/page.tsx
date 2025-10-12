@@ -6,8 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { motion } from "motion/react";
+import { useState } from "react";
+import { useAuth } from "@/providers/auth-provider";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const router = useRouter();
+
+  const handleSignIn = () => {
+    // Simulação de login - em uma aplicação real, você faria uma chamada para a API
+    if (email && password) {
+      login({
+        name: "Usuário",
+        email: email,
+        profileImage: "/images/profile.jpg",
+      });
+      router.push("/home");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       {/* Background musical instruments with neon effect */}
@@ -125,6 +145,8 @@ export default function Login() {
                     type="email"
                     placeholder="Enter your email"
                     className="w-full"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -140,6 +162,8 @@ export default function Login() {
                     type="password"
                     placeholder="Enter your password"
                     className="w-full"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
@@ -168,7 +192,10 @@ export default function Login() {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full bg-gray-800 hover:bg-gray-700 text-white">
+                <Button
+                  className="w-full bg-gray-800 hover:bg-gray-700 text-white"
+                  onClick={handleSignIn}
+                >
                   Sign In
                 </Button>
                 <Button

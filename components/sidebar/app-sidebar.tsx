@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Dices,
@@ -21,37 +23,50 @@ import {
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/tema/mode-toggle";
 import { Separator } from "../ui/separator";
+import { useAuth } from "@/providers/auth-provider";
 
 // Menu items.
-const items = [
+const allItems = [
   {
     title: "Select Your Instrument",
     url: "/selectinstrument",
     icon: Notebook,
+    requiresAuth: true,
   },
   {
     title: "Tuning",
     url: "/tuning",
     icon: Dices,
+    requiresAuth: false,
   },
   {
     title: "Practice Area",
     url: "/practice",
     icon: Signal,
+    requiresAuth: false,
   },
   {
     title: "Music Sheets",
     url: "/musicsheets",
     icon: Search,
+    requiresAuth: false,
   },
   {
     title: "My Profile",
     url: "/profile",
     icon: PersonStandingIcon,
+    requiresAuth: true,
   },
 ];
 
 export function AppSidebar() {
+  const { isAuthenticated } = useAuth();
+
+  // Filtrar itens baseado no estado de autenticação
+  const items = allItems.filter(
+    (item) => !item.requiresAuth || (item.requiresAuth && isAuthenticated)
+  );
+
   return (
     <Sidebar>
       <SidebarContent>
