@@ -1,0 +1,24 @@
+{
+    "name": "musician-ai/backend",
+    "description": "Backend PHP para Musician AI - Gerenciamento de usuários, autenticação e dados",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "slim/slim": "^4.0",
+        "slim/psr7": "^1.0",
+        "monolog/monolog": "^3.0",
+        "firebase/php-jwt": "^6.0",
+        "vlucas/phpdotenv": "^5.0",
+        "ramsey/uuid": "^4.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "MusicianAI\\": "src/"
+        }
+    },
+    "scripts": {
+        "start": "php -S localhost:8000 -t public",
+        "test": "phpunit tests/"
+    }
+}
