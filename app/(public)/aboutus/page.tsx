@@ -49,14 +49,14 @@ export default function AboutUs() {
 
   return (
     <div
-      className={`min-h-screen w-full relative ${
+      className={`min-h-screen w-full relative overflow-y-auto overflow-x-hidden ${
         theme === "dark" ? "bg-black-900" : "bg-gray-50"
       }`}
     >
       {/* Overlay with blur effect when sidebar is open */}
       <div
         className={`absolute inset-0 transition-all duration-300 ${
-          open || openMobile ? "backdrop-blur-md bg-black/10" : ""
+          open || openMobile ? "backdrop-blur-md bg-black/10 pointer-events-auto" : "pointer-events-none"
         }`}
         style={{ zIndex: 20 }}
       />

@@ -12,10 +12,10 @@ export function AccordionDemo() {
   const [selectedInstrument, setSelectedInstrument] = useState("");
 
   const instrumentImages = {
-    "item-1": "/images/intrumento-violino.png",
-    "item-2": "/images/instrumento-flauta.png",
+    "item-1": "/images/intrumento-violino.jpg",
+    "item-2": "/images/instrumento-flauta.jpg",
     "item-3": "/images/instrumento-trompete.png",
-    "item-4": "/images/instrumento-piano.png",
+    "item-4": "/images/instrumento-piano.jpg",
     "item-5": "/images/instrumento-cello.png",
     "item-6": "/images/instrumento-violao.png",
   };

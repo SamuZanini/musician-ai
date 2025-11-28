@@ -32,7 +32,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full relative">
+    <div className="min-h-screen w-full relative overflow-y-auto overflow-x-hidden">
       {/* Navbar */}
       <NavbarFinal />
       {/* Background image */}
@@ -48,7 +48,7 @@ export default function Home() {
       {/* Overlay with blur effect */}
       <div
         className={`absolute inset-0 transition-all duration-300 ${
-          open || openMobile ? "backdrop-blur-md bg-black/10" : ""
+          open || openMobile ? "backdrop-blur-md bg-black/10 pointer-events-auto" : "pointer-events-none"
         }`}
         style={{ zIndex: 20 }}
       />
@@ -65,7 +65,7 @@ export default function Home() {
       />
 
       {/* Content */}
-      <div className="relative flex items-center min-h-screen">
+      <div className="relative flex items-center min-h-screen w-full">
         <div
           className="flex flex-col items-center justify-center w-1/3 h-screen gap-6 pl-12"
           style={{ zIndex: 10 }}

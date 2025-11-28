@@ -50,6 +50,8 @@ class TuningResponse(BaseModel):
     cents_diff: float
     tuning_direction: str
     confidence: float
+    target_frequency: Optional[float] = None
+    harmonics_detected: Optional[list] = None
 
 class DetectionRequest(BaseModel):
     """Modelo para requisição de detecção"""
@@ -62,6 +64,9 @@ class DetectionResponse(BaseModel):
     note: str
     confidence: float
     is_detected: bool
+    cents_diff: Optional[float] = None
+    target_frequency: Optional[float] = None
+    harmonics: Optional[list] = None
 
 @app.get("/")
 async def root():
@@ -94,7 +99,15 @@ async def tune_audio(request: TuningRequest):
         # Obtém feedback de afinação
         feedback = audio_processor.get_tuning_feedback(request.frequency)
         
-        return TuningResponse(**feedback)
+        # Adiciona frequência alvo se disponível
+        note, _ = audio_processor.frequency_to_note(request.frequency)
+        target_freq = audio_processor.note_frequencies.get(note)
+        
+        return TuningResponse(
+            **feedback,
+            target_frequency=target_freq,
+            harmonics_detected=None
+        )
         
     except Exception as e:
         logger.error(f"Erro no endpoint /tune: {e}")
@@ -117,17 +130,21 @@ async def detect_audio(request: DetectionRequest):
         pitch, confidence = audio_processor.detect_pitch(audio_array)
         
         if pitch is not None:
-            note, _ = audio_processor.frequency_to_note(pitch)
+            note, cents_diff = audio_processor.frequency_to_note(pitch)
             is_detected = confidence > 0.3  # Threshold de confiança
         else:
             note = "Silêncio"
+            cents_diff = 0.0
             is_detected = False
         
         return DetectionResponse(
             pitch=pitch,
             note=note,
             confidence=confidence,
-            is_detected=is_detected
+            is_detected=is_detected,
+            cents_diff=round(cents_diff, 1) if pitch is not None else None,
+            target_frequency=None,
+            harmonics=None
         )
         
     except Exception as e:

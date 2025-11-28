@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/navbar/navbar";
 import ProviderWrapper from "@/providers/provider-wrapper";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -29,13 +28,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <ProviderWrapper>
           <SidebarProvider defaultOpen={false}>
-            <div className="flex min-h-screen w-full">
+            <div className="flex min-h-screen w-full overflow-x-hidden">
               <AppSidebar />
-              <main className="flex-1 flex flex-col">
+              <main className="flex-1 flex flex-col overflow-x-hidden">
                 <div
                   className="fixed top-6 z-[100] transition-all duration-300"
                   style={{ left: "1.5rem" }}

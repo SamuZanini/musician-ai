@@ -31,6 +31,11 @@ class ServiceManager:
                 "script": "detection_service.py",
                 "port": 8003,
                 "description": "Serviço de Detecção em Tempo Real"
+            },
+            "practice_service": {
+                "script": "practice_service.py",
+                "port": 8004,
+                "description": "Serviço de Prática Musical"
             }
         }
     
@@ -122,6 +127,7 @@ class ServiceManager:
             print("  - ML Service: http://localhost:8001")
             print("  - Tuner Service: http://localhost:8002") 
             print("  - Detection Service: http://localhost:8003")
+            print("  - Practice Service: http://localhost:8004")
             print("\nPressione Ctrl+C para parar todos os serviços")
         else:
             print("\n✗ Alguns serviços falharam ao iniciar")

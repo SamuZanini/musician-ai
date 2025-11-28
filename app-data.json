@@ -1,0 +1,429 @@
+{
+  "application": {
+    "name": "#Dô",
+    "description": "Uma maneira moderna de estudar música",
+    "version": "1.0.0",
+    "lastUpdated": "2025-11-13"
+  },
+  "users": [
+    {
+      "id": "user-001",
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "passwordHash": "hashed_password_here",
+      "avatarUrl": "/images/avatar1.jpg",
+      "bio": "Apaixonado por música clássica",
+      "favoriteInstrumentId": "violin-001",
+      "subscriptionPlan": "gold",
+      "createdAt": "2025-01-15T10:30:00Z",
+      "updatedAt": "2025-11-13T14:20:00Z"
+    },
+    {
+      "id": "user-002",
+      "name": "Maria Santos",
+      "email": "maria@example.com",
+      "passwordHash": "hashed_password_here",
+      "avatarUrl": "/images/avatar2.jpg",
+      "bio": "Estudante de piano",
+      "favoriteInstrumentId": "piano-001",
+      "subscriptionPlan": "silver",
+      "createdAt": "2025-02-20T08:15:00Z",
+      "updatedAt": "2025-11-13T09:45:00Z"
+    },
+    {
+      "id": "user-003",
+      "name": "Pedro Oliveira",
+      "email": "pedro@example.com",
+      "passwordHash": "hashed_password_here",
+      "avatarUrl": "/images/avatar3.jpg",
+      "bio": "Flautista iniciante",
+      "favoriteInstrumentId": "flute-001",
+      "subscriptionPlan": "copper",
+      "createdAt": "2025-03-10T16:45:00Z",
+      "updatedAt": "2025-11-13T11:30:00Z"
+    }
+  ],
+  "instruments": [
+    {
+      "id": "violin-001",
+      "name": "Violino",
+      "type": "string",
+      "description": "Instrumento de cordas friccionadas",
+      "faqContent": {
+        "faq": [
+          {
+            "question": "Como afinar?",
+            "answer": "Use a afinação EADG de cima para baixo."
+          },
+          {
+            "question": "Qual é a melhor técnica de arco?",
+            "answer": "Mantenha o arco perpendicular às cordas."
+          }
+        ]
+      },
+        "imageUrl": "/images/intrumento-violino.jpg",
+        "comoAfinar": "Use a afinação EADG de cima para baixo.",
+        "melhorTecnica": "Mantenha o arco perpendicular às cordas.",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "flute-001",
+      "name": "Flauta",
+      "type": "wind",
+      "description": "Instrumento de sopro",
+      "faqContent": {
+        "faq": [
+          {
+            "question": "Como começar?",
+            "answer": "Aprenda a posição de embocadura correta."
+          },
+          {
+            "question": "Notas básicas",
+            "answer": "Comece com dó, ré e mi."
+          }
+        ]
+      },
+        "imageUrl": "/images/instrumento-flauta.jpg",
+        "comoAfinar": "Use um afinador eletrônico e ajuste por ouvido.",
+        "melhorTecnica": "Mantenha a embocadura relaxada e controle do ar.",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "trumpet-001",
+      "name": "Trompete",
+      "type": "wind",
+      "description": "Instrumento de sopro de latão",
+      "faqContent": {
+        "faq": [
+          {
+            "question": "Como produzir som?",
+            "answer": "Use vibração de lábios na embocadura."
+          },
+          {
+            "question": "Cuidado com o instrumento",
+            "answer": "Limpe sempre após o uso."
+          }
+        ]
+      },
+        "imageUrl": "/images/instrumento-trompete.png",
+        "comoAfinar": "Use uma referência de afinação e ajuste válvulas/entonacão.",
+        "melhorTecnica": "Fortaleça a embocadura e controle a pressão do ar.",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "piano-001",
+      "name": "Piano",
+      "type": "keyboard",
+      "description": "Instrumento de teclas com 88 notas",
+      "faqContent": {
+        "faq": [
+          {
+            "question": "Posição das mãos",
+            "answer": "Mantenha os pulsos retos e relaxados."
+          },
+          {
+            "question": "Técnica de dedos",
+            "answer": "Use numeração: 1=polegar, 5=mindinho."
+          }
+        ]
+      },
+        "imageUrl": "/images/instrumento-piano.jpg",
+        "comoAfinar": "Pianos acústicos precisam de técnico; digitais não se aplicam.",
+        "melhorTecnica": "Mantenha postura ereta e pulso flexível ao tocar.",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "cello-001",
+      "name": "Cello",
+      "type": "string",
+      "description": "Instrumento de cordas graves",
+      "faqContent": {
+        "faq": [
+          {
+            "question": "Como segurar?",
+            "answer": "Entre as pernas, apoiado no ombro."
+          },
+          {
+            "question": "Afinação",
+            "answer": "CGDA de cima para baixo."
+          }
+        ]
+      },
+        "imageUrl": "/images/instrumento-cello.png",
+        "comoAfinar": "Use ponteiro do afinador e ajuste as cravelhas cuidadosamente.",
+        "melhorTecnica": "Posicione o instrumento entre as pernas e mantenha coluna reta.",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "composers": [
+    {
+      "id": "chopin-001",
+      "name": "Frédéric Chopin",
+      "biography": "Compositor e pianista polonês do século XIX, conhecido por suas obras para piano.",
+      "imageUrl": "/images/chopin.png",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "bach-001",
+      "name": "Johann Sebastian Bach",
+      "biography": "Compositor barroco alemão, mestre do contraponto e composição coral.",
+      "imageUrl": "/images/bach.png",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "beethoven-001",
+      "name": "Ludwig van Beethoven",
+      "biography": "Compositor alemão que fez a transição do Clássico ao Romântico.",
+      "imageUrl": "/images/beethoven.jpg",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "paganini-001",
+      "name": "Niccolò Paganini",
+      "biography": "Violinista e compositor italiano, revolucionou a técnica do violino.",
+      "imageUrl": "/images/paganini.jpg",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "vivaldi-001",
+      "name": "Antonio Vivaldi",
+      "biography": "Compositor veneziano, famoso pelas Quatro Estações.",
+      "imageUrl": "/images/vivaldi.jpg",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "sheetMusic": [
+    {
+      "id": "nocturne-001",
+      "title": "Nocturne Op. 9 No. 2",
+      "composerId": "chopin-001",
+      "instrumentId": "piano-001",
+      "description": "Uma das obras mais famosas de Chopin",
+      "imageUrl": "/images/nocturne.jpg",
+      "fileUrl": "/files/nocturne-op9-no2.pdf",
+      "difficulty": "intermediate",
+      "isPremium": false,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "prelude-001",
+      "title": "Prelude in C Major",
+      "composerId": "bach-001",
+      "instrumentId": "piano-001",
+      "description": "Primeira parte do WTC Book I",
+      "imageUrl": "/images/prelude.jpg",
+      "fileUrl": "/files/prelude-c-major.pdf",
+      "difficulty": "beginner",
+      "isPremium": false,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "moonlight-001",
+      "title": "Sonata ao Luar",
+      "composerId": "beethoven-001",
+      "instrumentId": "piano-001",
+      "description": "Sonata clássica para piano",
+      "imageUrl": "/images/moonlight.jpg",
+      "fileUrl": "/files/moonlight-sonata.pdf",
+      "difficulty": "advanced",
+      "isPremium": true,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "caprice-001",
+      "title": "Caprice No. 24",
+      "composerId": "paganini-001",
+      "instrumentId": "violin-001",
+      "description": "Obra desafiadora para violino",
+      "imageUrl": "/images/caprice.jpg",
+      "fileUrl": "/files/caprice-24.pdf",
+      "difficulty": "advanced",
+      "isPremium": true,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "four-seasons-001",
+      "title": "As Quatro Estações",
+      "composerId": "vivaldi-001",
+      "instrumentId": "violin-001",
+      "description": "Concertos para violino e orquestra",
+      "imageUrl": "/images/four-seasons.jpg",
+      "fileUrl": "/files/four-seasons.pdf",
+      "difficulty": "intermediate",
+      "isPremium": false,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub-001",
+      "userId": "user-001",
+      "planType": "gold",
+      "status": "active",
+      "price": 25.00,
+      "billingCycle": "monthly",
+      "startDate": "2025-08-15",
+      "endDate": "2025-12-15",
+      "createdAt": "2025-08-15T00:00:00Z",
+      "updatedAt": "2025-11-13T00:00:00Z"
+    },
+    {
+      "id": "sub-002",
+      "userId": "user-002",
+      "planType": "silver",
+      "status": "active",
+      "price": 15.00,
+      "billingCycle": "monthly",
+      "startDate": "2025-09-20",
+      "endDate": "2025-12-20",
+      "createdAt": "2025-09-20T00:00:00Z",
+      "updatedAt": "2025-11-13T00:00:00Z"
+    },
+    {
+      "id": "sub-003",
+      "userId": "user-003",
+      "planType": "copper",
+      "status": "active",
+      "price": 5.00,
+      "billingCycle": "monthly",
+      "startDate": "2025-10-10",
+      "endDate": "2025-12-10",
+      "createdAt": "2025-10-10T00:00:00Z",
+      "updatedAt": "2025-11-13T00:00:00Z"
+    }
+  ],
+  "practiceSessions": [
+    {
+      "id": "session-001",
+      "userId": "user-001",
+      "instrumentId": "violin-001",
+      "durationMinutes": 45,
+      "accuracyScore": 85,
+      "notesPlayed": 200,
+      "notesCorrect": 170,
+      "sessionDate": "2025-11-13",
+      "createdAt": "2025-11-13T10:00:00Z",
+      "updatedAt": "2025-11-13T10:45:00Z"
+    },
+    {
+      "id": "session-002",
+      "userId": "user-002",
+      "instrumentId": "piano-001",
+      "durationMinutes": 60,
+      "accuracyScore": 92,
+      "notesPlayed": 300,
+      "notesCorrect": 276,
+      "sessionDate": "2025-11-13",
+      "createdAt": "2025-11-13T15:00:00Z",
+      "updatedAt": "2025-11-13T16:00:00Z"
+    },
+    {
+      "id": "session-003",
+      "userId": "user-003",
+      "instrumentId": "flute-001",
+      "durationMinutes": 30,
+      "accuracyScore": 78,
+      "notesPlayed": 120,
+      "notesCorrect": 94,
+      "sessionDate": "2025-11-12",
+      "createdAt": "2025-11-12T14:00:00Z",
+      "updatedAt": "2025-11-12T14:30:00Z"
+    }
+  ],
+  "userStatistics": [
+    {
+      "id": "stats-001",
+      "userId": "user-001",
+      "totalPracticeTime": 450,
+      "currentStreak": 12,
+      "longestStreak": 25,
+      "totalSessions": 18,
+      "totalStars": 156,
+      "lastPracticeDate": "2025-11-13",
+      "createdAt": "2025-01-15T00:00:00Z",
+      "updatedAt": "2025-11-13T10:45:00Z"
+    },
+    {
+      "id": "stats-002",
+      "userId": "user-002",
+      "totalPracticeTime": 380,
+      "currentStreak": 8,
+      "longestStreak": 15,
+      "totalSessions": 16,
+      "totalStars": 128,
+      "lastPracticeDate": "2025-11-13",
+      "createdAt": "2025-02-20T00:00:00Z",
+      "updatedAt": "2025-11-13T16:00:00Z"
+    },
+    {
+      "id": "stats-003",
+      "userId": "user-003",
+      "totalPracticeTime": 150,
+      "currentStreak": 3,
+      "longestStreak": 7,
+      "totalSessions": 6,
+      "totalStars": 32,
+      "lastPracticeDate": "2025-11-12",
+      "createdAt": "2025-03-10T00:00:00Z",
+      "updatedAt": "2025-11-12T14:30:00Z"
+    }
+  ],
+  "pricingPlans": [
+    {
+      "id": "copper",
+      "name": "Copper",
+      "monthlyPrice": 5,
+      "yearlyPrice": 50,
+      "features": [
+        "Acesso básico às lições",
+        "1 instrumento",
+        "Suporte por email",
+        "Comunidade básica",
+        "Atualizações mensais"
+      ]
+    },
+    {
+      "id": "silver",
+      "name": "Silver",
+      "monthlyPrice": 15,
+      "yearlyPrice": 150,
+      "features": [
+        "Acesso a todas as lições",
+        "Até 3 instrumentos",
+        "Suporte prioritário",
+        "Comunidade premium",
+        "Analytics detalhado",
+        "Certificados"
+      ]
+    },
+    {
+      "id": "gold",
+      "name": "Gold",
+      "monthlyPrice": 25,
+      "yearlyPrice": 250,
+      "features": [
+        "Acesso ilimitado",
+        "Instrumentos ilimitados",
+        "Suporte 24/7",
+        "Comunidade VIP",
+        "Analytics avançado",
+        "Certificados premium"
+      ]
+    }
+  ]
+}
