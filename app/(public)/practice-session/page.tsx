@@ -81,10 +81,10 @@ export default function PracticeSession() {
 
   const { isRecording, error, startRecording, stopRecording, analyser } = useMicrophone();
   const [mlEnabled, setMlEnabled] = useState(true);
-  const [mlNote, setMlNote] = useState<string>("");
-  const [mlAccuracy, setMlAccuracy] = useState<number>(0);
-  const [mlFeedback, setMlFeedback] = useState<string>("");
-  const [mlIsCorrect, setMlIsCorrect] = useState<boolean>(false);
+  const [mlNote, setMlNote] = useState<string | undefined>(undefined);
+  const [mlAccuracy, setMlAccuracy] = useState<number | undefined>(undefined);
+  const [mlFeedback, setMlFeedback] = useState<string | undefined>(undefined);
+  const [mlIsCorrect, setMlIsCorrect] = useState<boolean | undefined>(undefined);
   const lastFrequencyRef = useRef<number | null>(null);
   const mlProcessingRef = useRef(false);
 
@@ -92,11 +92,18 @@ export default function PracticeSession() {
   const { checkPracticeWithFrequency, isProcessing: isMLProcessing, lastPracticeCheck } = useMLIntegration({
     enabled: mlEnabled && isPlaying,
     onPracticeCheck: (data) => {
+      console.log("🎯 [PRACTICE SESSION] onPracticeCheck chamado com dados:", data);
       if (data) {
-        setMlNote(data.detected_note);
-        setMlAccuracy(data.accuracy_score);
-        setMlFeedback(data.feedback_message);
-        setMlIsCorrect(data.is_correct);
+        console.log("📊 [PRACTICE SESSION] Atualizando métricas:", {
+          detected_note: data.detected_note,
+          accuracy_score: data.accuracy_score,
+          feedback_message: data.feedback_message,
+          is_correct: data.is_correct,
+        });
+        setMlNote(data.detected_note || undefined);
+        setMlAccuracy(data.accuracy_score !== undefined ? data.accuracy_score : undefined);
+        setMlFeedback(data.feedback_message || undefined);
+        setMlIsCorrect(data.is_correct !== undefined ? data.is_correct : undefined);
         
         // Usar feedback do ML para validar acerto/erro
         if (data.is_correct && data.confidence > 0.3) {
@@ -104,10 +111,12 @@ export default function PracticeSession() {
         } else if (!data.is_correct && data.confidence > 0.3) {
           handleMLFeedback(false);
         }
+      } else {
+        console.warn("⚠️ [PRACTICE SESSION] onPracticeCheck recebeu dados null/undefined");
       }
     },
     onError: (err) => {
-      console.error("Erro no ML durante prática:", err);
+      console.error("❌ [PRACTICE SESSION] Erro no ML durante prática:", err);
     },
   });
 
@@ -278,13 +287,76 @@ export default function PracticeSession() {
     }
   };
 
+  // Função para salvar estatísticas da sessão
+  const saveSessionStats = useCallback(() => {
+    try {
+      const localUser = localStorage.getItem("user");
+      if (!localUser) {
+        console.warn("⚠️ [PRACTICE SESSION] Nenhum usuário encontrado para salvar estatísticas");
+        return;
+      }
+
+      const userObj = JSON.parse(localUser);
+      const userId = userObj?.id || userObj?.userId;
+      
+      if (!userId) {
+        console.warn("⚠️ [PRACTICE SESSION] userId não encontrado");
+        return;
+      }
+
+      // Buscar estatísticas existentes
+      const localStatsKey = `userStats_${userId}`;
+      const existingStats = localStorage.getItem(localStatsKey);
+      
+      let stats = {
+        totalPracticeTime: 0,
+        currentStreak: 0,
+        totalSessions: 0,
+        totalStars: 0,
+      };
+
+      if (existingStats) {
+        try {
+          stats = JSON.parse(existingStats);
+        } catch (e) {
+          console.warn("⚠️ [PRACTICE SESSION] Erro ao parsear estatísticas existentes:", e);
+        }
+      }
+
+      // Calcular tempo de prática (aproximado - baseado no tempo que a sessão esteve ativa)
+      // Por enquanto, vamos incrementar apenas as sessões
+      stats.totalSessions = (stats.totalSessions || 0) + 1;
+      
+      // Incrementar estrelas baseado na precisão média (se houver)
+      if (mlAccuracy !== undefined && mlAccuracy > 0) {
+        const starsEarned = Math.floor(mlAccuracy / 20); // 1 estrela a cada 20% de precisão
+        stats.totalStars = (stats.totalStars || 0) + starsEarned;
+      }
+
+      // Salvar no localStorage
+      localStorage.setItem(localStatsKey, JSON.stringify(stats));
+      console.log("✅ [PRACTICE SESSION] Estatísticas salvas:", stats);
+    } catch (e) {
+      console.error("❌ [PRACTICE SESSION] Erro ao salvar estatísticas:", e);
+    }
+  }, [mlAccuracy]);
+
   const stopSession = () => {
     setIsPlaying(false);
     stopRecording();
+    
+    // Salvar estatísticas antes de parar
+    saveSessionStats();
+    
     setFeedback(null);
     setShowFeedback(false);
     setCountdown(10);
     setDetectedNote("");
+    // Resetar métricas ML
+    setMlNote(undefined);
+    setMlAccuracy(undefined);
+    setMlFeedback(undefined);
+    setMlIsCorrect(undefined);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -472,22 +544,24 @@ export default function PracticeSession() {
                           <div className="flex justify-between text-sm items-center">
                             <span className="text-gray-400">Nota detectada (ML):</span>
                             <span className={`font-semibold ${
-                              mlNote ? (mlIsCorrect ? "text-green-400" : "text-red-400") : "text-gray-500"
+                              mlNote !== undefined 
+                                ? (mlIsCorrect ? "text-green-400" : "text-red-400") 
+                                : "text-gray-500"
                             }`}>
-                              {mlNote || "---"}
+                              {mlNote !== undefined ? mlNote : "---"}
                             </span>
                           </div>
                           <div className="flex justify-between text-sm items-center">
                             <span className="text-gray-400">Precisão (ML):</span>
                             <span className={`font-semibold ${
-                              mlAccuracy > 0 
+                              mlAccuracy !== undefined && mlAccuracy > 0 
                                 ? (mlAccuracy >= 80 ? "text-green-400" : mlAccuracy >= 60 ? "text-yellow-400" : "text-red-400")
                                 : "text-gray-500"
                             }`}>
-                              {mlAccuracy > 0 ? `${mlAccuracy.toFixed(1)}%` : "---"}
+                              {mlAccuracy !== undefined && mlAccuracy > 0 ? `${mlAccuracy.toFixed(1)}%` : "---"}
                             </span>
                           </div>
-                          {mlFeedback && (
+                          {mlFeedback !== undefined && mlFeedback && (
                             <div className="mt-2 p-2 bg-gray-800/50 rounded text-xs">
                               <p className={`${
                                 mlIsCorrect ? "text-green-400" : "text-yellow-400"

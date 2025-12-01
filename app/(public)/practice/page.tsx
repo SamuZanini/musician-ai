@@ -82,20 +82,49 @@ export default function PracticeArea() {
           const userObj = JSON.parse(localUser);
           const userId = userObj?.id || userObj?.userId;
           
+          console.log("🔍 [PRACTICE] Buscando estatísticas para userId:", userId);
+          
           if (userId) {
-            const userStats = userStatistics.find((stat: any) => stat.userId === userId);
-            if (userStats) {
-              stats = {
-                practiceTime: userStats.totalPracticeTime,
-                dayStreak: userStats.currentStreak,
-                division: userStats.totalSessions,
-                stars: userStats.totalStars,
-              };
+            // Primeiro tenta buscar do localStorage (estatísticas atualizadas)
+            const localStats = localStorage.getItem(`userStats_${userId}`);
+            if (localStats) {
+              try {
+                const parsedStats = JSON.parse(localStats);
+                console.log("✅ [PRACTICE] Estatísticas encontradas no localStorage:", parsedStats);
+                stats = {
+                  practiceTime: parsedStats.totalPracticeTime,
+                  dayStreak: parsedStats.currentStreak,
+                  division: parsedStats.totalSessions,
+                  stars: parsedStats.totalStars,
+                };
+              } catch (e) {
+                console.warn("⚠️ [PRACTICE] Erro ao parsear estatísticas do localStorage:", e);
+              }
             }
+            
+            // Se não encontrou no localStorage, busca no JSON
+            if (stats.practiceTime === undefined) {
+              const userStats = userStatistics.find((stat: any) => stat.userId === userId);
+              if (userStats) {
+                console.log("✅ [PRACTICE] Estatísticas encontradas no JSON:", userStats);
+                stats = {
+                  practiceTime: userStats.totalPracticeTime,
+                  dayStreak: userStats.currentStreak,
+                  division: userStats.totalSessions,
+                  stars: userStats.totalStars,
+                };
+              } else {
+                console.warn("⚠️ [PRACTICE] Nenhuma estatística encontrada para userId:", userId);
+              }
+            }
+          } else {
+            console.warn("⚠️ [PRACTICE] userId não encontrado no objeto do usuário");
           }
         } catch (e) {
-          console.error("Erro ao processar estatísticas do usuário:", e);
+          console.error("❌ [PRACTICE] Erro ao processar estatísticas do usuário:", e);
         }
+      } else {
+        console.warn("⚠️ [PRACTICE] Nenhum usuário encontrado no localStorage");
       }
 
       setPracticeData({
@@ -153,7 +182,9 @@ export default function PracticeArea() {
               <Card key={idx} className="bg-gray-900/60 border-gray-700 p-6 hover:bg-gray-900/80 transition-colors">
                 <div className="flex flex-col items-center gap-3">
                   <div className="text-gray-400">{stat.icon}</div>
-                  <span className="text-3xl font-bold text-white">{stat.value}</span>
+                  <span className="text-3xl font-bold text-white">
+                    {stat.value !== undefined ? stat.value : "---"}
+                  </span>
                   <span className="text-gray-400 text-sm">{stat.label}</span>
                 </div>
               </Card>

@@ -46,10 +46,6 @@ export function useMLIntegration(options: UseMLIntegrationOptions = {}) {
   const [error, setError] = useState<string | null>(null);
   
   const processingRef = useRef(false);
-  
-  const {
-    onPracticeCheck,
-  } = options;
 
   /**
    * Detecta áudio usando os serviços de ML
@@ -176,7 +172,12 @@ export function useMLIntegration(options: UseMLIntegrationOptions = {}) {
         });
 
         setLastPracticeCheck(result);
-        onPracticeCheck?.(result);
+        if (options.onPracticeCheck) {
+          console.log("📞 [ML INTEGRATION] Chamando callback onPracticeCheck");
+          options.onPracticeCheck(result);
+        } else {
+          console.warn("⚠️ [ML INTEGRATION] onPracticeCheck não está definido");
+        }
 
         console.groupEnd();
         return result;
@@ -187,7 +188,7 @@ export function useMLIntegration(options: UseMLIntegrationOptions = {}) {
           message: errorMessage,
         });
         setError(errorMessage);
-        onError?.(err);
+        options.onError?.(err);
         console.groupEnd();
         return null;
       } finally {
@@ -195,7 +196,7 @@ export function useMLIntegration(options: UseMLIntegrationOptions = {}) {
         processingRef.current = false;
       }
     },
-    [enabled, instrument, onPracticeCheck, onError]
+    [enabled, instrument, options.onPracticeCheck, options.onError]
   );
 
   /**
@@ -219,13 +220,18 @@ export function useMLIntegration(options: UseMLIntegrationOptions = {}) {
         );
 
         setLastPracticeCheck(result);
-        onPracticeCheck?.(result);
+        if (options.onPracticeCheck) {
+          console.log("📞 [ML INTEGRATION] Chamando callback onPracticeCheck (processPracticeWithAudio)");
+          options.onPracticeCheck(result);
+        } else {
+          console.warn("⚠️ [ML INTEGRATION] onPracticeCheck não está definido");
+        }
 
         return result;
       } catch (err: any) {
         const errorMessage = err.message || "Erro ao processar prática";
         setError(errorMessage);
-        onError?.(err);
+        options.onError?.(err);
         console.error("Erro no processamento de prática:", err);
         return null;
       } finally {
@@ -233,7 +239,7 @@ export function useMLIntegration(options: UseMLIntegrationOptions = {}) {
         processingRef.current = false;
       }
     },
-    [enabled, instrument, onPracticeCheck, onError]
+    [enabled, instrument, options.onPracticeCheck, options.onError]
   );
 
   return {

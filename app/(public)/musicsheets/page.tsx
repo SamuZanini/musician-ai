@@ -22,6 +22,8 @@ interface SheetMusic {
   composerId: string;
   difficulty: string;
   isPremium: boolean;
+  imageUrl?: string;
+  description?: string;
 }
 
 export default function MusicSheets() {
@@ -67,6 +69,8 @@ export default function MusicSheets() {
           composerId: sheet.composerId,
           difficulty: difficultyMap[sheet.difficulty] || sheet.difficulty,
           isPremium: sheet.isPremium || false,
+          imageUrl: sheet.imageUrl,
+          description: sheet.description,
         });
       });
       
@@ -115,25 +119,59 @@ export default function MusicSheets() {
                   </AccordionTrigger>
 
                   <AccordionContent className="px-6 py-4 bg-gray-900/20 border-t border-gray-700">
-                    <div className="space-y-3">
-                      {sheetMusic[composer.id]?.map((sheet) => (
-                        <Card key={sheet.id} className="border-gray-600 bg-gray-800/40 p-4 hover:bg-gray-800/60 transition-colors">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h4 className="text-white font-semibold text-lg">{sheet.title}</h4>
-                              <p className="text-gray-400 text-sm mt-1">Dificuldade: {sheet.difficulty}</p>
+                    <div className="space-y-4">
+                      {sheetMusic[composer.id]?.map((sheet) => {
+                        const sheetImage = sheet.imageUrl || "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=600&fit=crop";
+                        
+                        return (
+                          <Card key={sheet.id} className="border-gray-600 bg-gray-800/40 overflow-hidden hover:bg-gray-800/60 transition-colors">
+                            <div className="flex gap-4 p-4">
+                              {/* Imagem da partitura */}
+                              <div className="flex-shrink-0">
+                                <img
+                                  src={sheetImage}
+                                  alt={sheet.title}
+                                  className="w-32 h-48 object-cover rounded-lg border border-gray-700 shadow-lg"
+                                  onError={(e) => {
+                                    // Fallback para imagem padrão se a URL falhar
+                                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=600&fit=crop";
+                                  }}
+                                />
+                              </div>
+                              
+                              {/* Informações da partitura */}
+                              <div className="flex-1 flex flex-col justify-between">
+                                <div>
+                                  <h4 className="text-white font-semibold text-lg mb-2">{sheet.title}</h4>
+                                  <p className="text-gray-400 text-sm mb-1">
+                                    Dificuldade: <span className={`font-semibold ${
+                                      sheet.difficulty === "Iniciante" ? "text-green-400" :
+                                      sheet.difficulty === "Intermediário" ? "text-yellow-400" :
+                                      "text-red-400"
+                                    }`}>{sheet.difficulty}</span>
+                                  </p>
+                                  {sheet.description && (
+                                    <p className="text-gray-500 text-xs mt-2">{sheet.description}</p>
+                                  )}
+                                </div>
+                                
+                                <div className="flex items-center justify-between mt-4">
+                                  <div className="flex gap-2">
+                                    {sheet.isPremium && (
+                                      <span className="bg-yellow-500/20 text-yellow-400 text-xs px-3 py-1 rounded-full border border-yellow-500/30">
+                                        Premium
+                                      </span>
+                                    )}
+                                  </div>
+                                  <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold">
+                                    Ver Partitura
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
-                            <div className="flex gap-2">
-                              {sheet.isPremium && (
-                                <span className="bg-yellow-500/20 text-yellow-400 text-xs px-3 py-1 rounded-full">Premium</span>
-                              )}
-                              <Button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold">
-                                Ver Partitura
-                              </Button>
-                            </div>
-                          </div>
-                        </Card>
-                      ))}
+                          </Card>
+                        );
+                      })}
                     </div>
                   </AccordionContent>
                 </AccordionItem>

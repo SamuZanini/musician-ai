@@ -68,7 +68,7 @@ export default function AboutUs() {
       >
         <p
           className={`text-center text-2xl pd-10 ${
-            theme === "dark" ? "text-white" : "text-gray-800"
+            theme === "dark" ? "text-white" : "text-gray-900"
           }`}
         >
           Turn creators{" "}
@@ -88,7 +88,7 @@ export default function AboutUs() {
             </Avatar>
             <h1
               className={`text-5xl text-center font-italianno ${
-                theme === "dark" ? "text-white" : "text-gray-800"
+                theme === "dark" ? "text-white" : "text-gray-900"
               }`}
             >
               Samuel Zanini Campos Vanoni
@@ -102,7 +102,7 @@ export default function AboutUs() {
             </Avatar>
             <h1
               className={`text-5xl text-center font-italianno ${
-                theme === "dark" ? "text-white" : "text-gray-800"
+                theme === "dark" ? "text-white" : "text-gray-900"
               }`}
             >
               Hugo Otávio dos Santos de Paula

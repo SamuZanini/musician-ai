@@ -43,10 +43,21 @@ export default function Tuning() {
   const { processFrequency, isProcessing: isMLProcessing } = useMLIntegration({
     enabled: mlEnabled,
     onTuning: (data) => {
+      console.log("🎯 [TUNING] onTuning chamado com dados:", data);
       if (data) {
         // TuningResponse tem 'note', TunerResponse tem 'current_note'
         const note = "current_note" in data ? data.current_note : data.note;
         const targetFreq = "target_frequency" in data ? data.target_frequency : data.frequency;
+        
+        console.log("📊 [TUNING] Atualizando tuningData:", {
+          note,
+          frequency: data.frequency,
+          targetFrequency: targetFreq,
+          confidence: data.confidence,
+          cents_diff: data.cents_diff,
+          tuning_direction: data.tuning_direction,
+          is_in_tune: data.is_in_tune,
+        });
         
         setTuningData((prev) => ({
           ...prev,
@@ -59,11 +70,13 @@ export default function Tuning() {
           isInTune: data.is_in_tune ?? prev.isInTune,
         }));
         setMlError(null);
+      } else {
+        console.warn("⚠️ [TUNING] onTuning recebeu dados null/undefined");
       }
     },
     onError: (err) => {
       setMlError(err.message);
-      console.error("Erro no ML:", err);
+      console.error("❌ [TUNING] Erro no ML:", err);
     },
   });
 
