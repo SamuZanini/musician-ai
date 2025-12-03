@@ -75,9 +75,12 @@ export default function PracticeSession() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const [detectedNote, setDetectedNote] = useState<string>("");
+  const [sessionTime, setSessionTime] = useState(0); // Tempo em segundos
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const feedbackTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const sessionStartTimeRef = useRef<number | null>(null);
 
   const { isRecording, error, startRecording, stopRecording, analyser } = useMicrophone();
   const [mlEnabled, setMlEnabled] = useState(true);
@@ -212,6 +215,18 @@ export default function PracticeSession() {
 
   useEffect(() => {
     if (isPlaying) {
+      // Iniciar timer da sessão
+      if (sessionStartTimeRef.current === null) {
+        sessionStartTimeRef.current = Date.now();
+      }
+      
+      timerRef.current = setInterval(() => {
+        if (sessionStartTimeRef.current !== null) {
+          const elapsedSeconds = Math.floor((Date.now() - sessionStartTimeRef.current) / 1000);
+          setSessionTime(elapsedSeconds);
+        }
+      }, 1000);
+
       // Contador regressivo
       setCountdown(10);
       countdownRef.current = setInterval(() => {
@@ -246,6 +261,10 @@ export default function PracticeSession() {
         clearInterval(countdownRef.current);
         countdownRef.current = null;
       }
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
       setCountdown(10);
     }
 
@@ -256,8 +275,11 @@ export default function PracticeSession() {
       if (countdownRef.current) {
         clearInterval(countdownRef.current);
       }
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
-  }, [isPlaying]);
+  }, [isPlaying, practiceNotes]);
 
   // Função para simular feedback do ML (será substituída pela conexão real)
   const handleMLFeedback = useCallback((isCorrect: boolean) => {
@@ -280,12 +302,69 @@ export default function PracticeSession() {
       // Iniciar gravação e sessão
       await startRecording();
       setIsPlaying(true);
+      
+      // Registrar o início da sessão no histórico
+      recordSessionStart();
     } else {
       // Pausar gravação e sessão
       stopRecording();
       setIsPlaying(false);
     }
   };
+
+  // Função para registrar o início de uma sessão
+  const recordSessionStart = useCallback(() => {
+    try {
+      const localUser = localStorage.getItem("user");
+      if (!localUser) {
+        console.warn("⚠️ [PRACTICE SESSION] Nenhum usuário encontrado para registrar sessão");
+        return;
+      }
+
+      const userObj = JSON.parse(localUser);
+      const userId = userObj?.id || userObj?.userId;
+      
+      if (!userId) {
+        console.warn("⚠️ [PRACTICE SESSION] userId não encontrado");
+        return;
+      }
+
+      // Buscar instrumento favorito
+      const favoriteInstrumentId = userObj?.favoriteInstrumentId || "unknown";
+      
+      // Criar registro de sessão
+      const sessionRecord = {
+        id: `session-${userId}-${Date.now()}`,
+        userId: userId,
+        instrumentId: favoriteInstrumentId,
+        startTime: new Date().toISOString(),
+        startDate: new Date().toLocaleDateString("pt-BR"),
+        startHour: new Date().toLocaleTimeString("pt-BR"),
+      };
+
+      // Buscar histórico existente
+      const historyKey = `sessionHistory_${userId}`;
+      const existingHistory = localStorage.getItem(historyKey);
+      
+      let sessions = [];
+      if (existingHistory) {
+        try {
+          sessions = JSON.parse(existingHistory);
+        } catch (e) {
+          console.warn("⚠️ [PRACTICE SESSION] Erro ao parsear histórico existente:", e);
+        }
+      }
+
+      // Adicionar nova sessão ao histórico
+      sessions.push(sessionRecord);
+      
+      // Salvar no localStorage
+      localStorage.setItem(historyKey, JSON.stringify(sessions));
+      console.log("✅ [PRACTICE SESSION] Sessão registrada:", sessionRecord);
+    } catch (e) {
+      console.error("❌ [PRACTICE SESSION] Erro ao registrar sessão:", e);
+    }
+  }, []);
 
   // Função para salvar estatísticas da sessão
   const saveSessionStats = useCallback(() => {
@@ -323,23 +402,55 @@ export default function PracticeSession() {
         }
       }
 
-      // Calcular tempo de prática (aproximado - baseado no tempo que a sessão esteve ativa)
-      // Por enquanto, vamos incrementar apenas as sessões
+      // Adicionar tempo de prática (em minutos)
+      const practiceMinutes = Math.floor(sessionTime / 60);
+      stats.totalPracticeTime = (stats.totalPracticeTime || 0) + practiceMinutes;
+      
+      // Contar sessão
       stats.totalSessions = (stats.totalSessions || 0) + 1;
       
       // Incrementar estrelas baseado na precisão média (se houver)
-      if (mlAccuracy !== undefined && mlAccuracy > 0) {
-        const starsEarned = Math.floor(mlAccuracy / 20); // 1 estrela a cada 20% de precisão
-        stats.totalStars = (stats.totalStars || 0) + starsEarned;
-      }
+      const starsEarned = mlAccuracy !== undefined && mlAccuracy > 0 ? Math.floor(mlAccuracy / 20) : 0;
+      stats.totalStars = (stats.totalStars || 0) + starsEarned;
 
       // Salvar no localStorage
       localStorage.setItem(localStatsKey, JSON.stringify(stats));
-      console.log("✅ [PRACTICE SESSION] Estatísticas salvas:", stats);
+      console.log("✅ [PRACTICE SESSION] Estatísticas salvas:", {
+        totalPracticeTime: stats.totalPracticeTime,
+        totalSessions: stats.totalSessions,
+        totalStars: stats.totalStars,
+        practiceMinutesThisSession: practiceMinutes,
+      });
+
+      // Atualizar histórico de sessões com dados finais
+      const historyKey = `sessionHistory_${userId}`;
+      const existingHistory = localStorage.getItem(historyKey);
+      
+      let sessions = [];
+      if (existingHistory) {
+        try {
+          sessions = JSON.parse(existingHistory);
+        } catch (e) {
+          console.warn("⚠️ [PRACTICE SESSION] Erro ao parsear histórico:", e);
+        }
+      }
+
+      // Encontrar a última sessão e atualizar com dados finais
+      if (sessions.length > 0) {
+        const lastSession = sessions[sessions.length - 1];
+        lastSession.endTime = new Date().toISOString();
+        lastSession.endHour = new Date().toLocaleTimeString("pt-BR");
+        lastSession.durationMinutes = practiceMinutes;
+        lastSession.accuracy = mlAccuracy || 0;
+        lastSession.starsEarned = starsEarned;
+        
+        localStorage.setItem(historyKey, JSON.stringify(sessions));
+        console.log("✅ [PRACTICE SESSION] Histórico atualizado com dados finais da sessão");
+      }
     } catch (e) {
       console.error("❌ [PRACTICE SESSION] Erro ao salvar estatísticas:", e);
     }
-  }, [mlAccuracy]);
+  }, [mlAccuracy, sessionTime]);
 
   const stopSession = () => {
     setIsPlaying(false);
@@ -352,6 +463,8 @@ export default function PracticeSession() {
     setShowFeedback(false);
     setCountdown(10);
     setDetectedNote("");
+    setSessionTime(0);
+    sessionStartTimeRef.current = null;
     // Resetar métricas ML
     setMlNote(undefined);
     setMlAccuracy(undefined);
@@ -364,6 +477,10 @@ export default function PracticeSession() {
     if (countdownRef.current) {
       clearInterval(countdownRef.current);
       countdownRef.current = null;
+    }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
     if (feedbackTimeoutRef.current) {
       clearTimeout(feedbackTimeoutRef.current);
@@ -378,6 +495,9 @@ export default function PracticeSession() {
       }
       if (countdownRef.current) {
         clearInterval(countdownRef.current);
+      }
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
       }
       if (feedbackTimeoutRef.current) {
         clearTimeout(feedbackTimeoutRef.current);
@@ -509,6 +629,12 @@ export default function PracticeSession() {
 
                 {/* Informações adicionais */}
                 <div className="mt-8 pt-8 border-t border-gray-700 space-y-3">
+                  <div className="flex justify-between text-sm items-center">
+                    <span className="text-gray-400">Tempo de Prática:</span>
+                    <span className="text-white font-bold text-lg">
+                      {`${Math.floor(sessionTime / 60)}:${(sessionTime % 60).toString().padStart(2, '0')}`}
+                    </span>
+                  </div>
                   <div className="flex justify-between text-sm items-center">
                     <span className="text-gray-400">Próxima nota em:</span>
                     <span className="text-white font-bold text-lg">

@@ -3,135 +3,118 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import NavbarFinal from "@/components/navbar";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Ripple } from "@/components/ui/ripple";
-import { useSidebar } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 import appData from "../../../app-data.json";
 
-type InstrumentJson = {
+interface Instrument {
   id: string;
   name: string;
   type: string;
   description: string;
-  faqContent?: { faq: Array<{ question: string; answer: string }> };
-  imageUrl?: string;
-  comoAfinar?: string;
-  melhorTecnica?: string;
-};
-
-const INSTRUMENTS: InstrumentJson[] = (appData as any).instruments || [];
+  imageUrl: string;
+}
 
 export default function SelectInstrument() {
   const router = useRouter();
-  const { open, openMobile } = useSidebar();
+  const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [selectedInstrument, setSelectedInstrument] = useState<string | null>(null);
 
   useEffect(() => {
-    // On mount, load selection from localStorage.user if present
+    setMounted(true);
+    const instrumentsList = (appData as any).instruments || [];
+    setInstruments(instrumentsList);
+
+    // Verificar se o usuário já tem um instrumento favorito selecionado
     const localUser = localStorage.getItem("user");
     if (localUser) {
       try {
         const userObj = JSON.parse(localUser);
-        if (userObj && userObj.favoriteInstrumentId) {
-          setSelectedInstrument(userObj.favoriteInstrumentId);
+        if (userObj?.favoriteInstrumentId) {
+          setSelectedId(userObj.favoriteInstrumentId);
         }
       } catch (e) {
-        // ignore parse errors
+        console.warn("Erro ao parsear usuário:", e);
       }
     }
-    setMounted(true);
   }, []);
 
-  const handleConfirm = () => {
-    if (selectedInstrument) {
-      // Update localStorage.user with selected instrument
-      const localUser = localStorage.getItem("user");
-      let userObj: any = {};
-      if (localUser) {
-        try {
-          userObj = JSON.parse(localUser);
-        } catch (e) {
-          userObj = {};
+  const handleSelectInstrument = async (instrumentId: string) => {
+    setSelectedId(instrumentId);
+
+    // Atualizar no localStorage
+    const localUser = localStorage.getItem("user");
+    if (localUser) {
+      try {
+        const userObj = JSON.parse(localUser);
+        userObj.favoriteInstrumentId = instrumentId;
+        localStorage.setItem("user", JSON.stringify(userObj));
+
+        // Atualizar no JSON
+        const users = (appData as any).users || [];
+        const userIndex = users.findIndex((u: any) => u.id === userObj.id);
+        if (userIndex !== -1) {
+          users[userIndex].favoriteInstrumentId = instrumentId;
+          // Fazer uma chamada API para salvar no backend
+          try {
+            await fetch("/api/save-app-data", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ appData }),
+            });
+          } catch (e) {
+            console.warn("Erro ao salvar no backend:", e);
+          }
         }
+      } catch (e) {
+        console.error("Erro ao atualizar instrumento:", e);
       }
-      userObj.favoriteInstrumentId = selectedInstrument;
-      localStorage.setItem("user", JSON.stringify(userObj));
-      router.push("/tuning");
+    }
+  };
+
+  const handleConfirm = () => {
+    if (selectedId) {
+      router.push("/practice");
     }
   };
 
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen w-full relative bg-black overflow-y-auto overflow-x-hidden">
+    <div className="min-h-screen w-full bg-black">
       <NavbarFinal />
 
-      <div className="fixed left-0 top-1/2 -translate-y-1/2 z-0">
-        <Ripple />
-      </div>
-
-      <div className={`fixed inset-0 transition-all duration-300 ${
-        open || openMobile ? "backdrop-blur-md bg-black/30 pointer-events-auto" : "pointer-events-none"
-      }`} style={{ zIndex: 5 }} />
-
-      <div className="relative z-10 pt-20 px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
+      <div className="pt-20 px-6 pb-20">
+        <div className="max-w-7xl mx-auto">
           <h1 className="text-5xl font-bold text-white mb-4">Selecione seu Instrumento</h1>
-          <p className="text-gray-400 mb-12 text-lg">
-            Escolha o instrumento que você deseja praticar e veja as dicas para começar.
-          </p>
+          <p className="text-gray-400 mb-12 text-lg">Escolha o instrumento que deseja praticar</p>
 
-          {/* Instruments Grid */}
-          <div className="grid grid-cols-2 gap-6 mb-12">
-            {INSTRUMENTS.map((instrument) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {instruments.map((instrument) => (
               <Card
                 key={instrument.id}
-                className={`cursor-pointer transition-all duration-300 border overflow-hidden ${
-                  selectedInstrument === instrument.id
-                    ? "border-yellow-400 bg-gray-900/80 ring-2 ring-yellow-400"
-                    : "border-gray-700 bg-gray-900/40 hover:bg-gray-900/60 hover:border-gray-600"
+                className={`cursor-pointer border-2 transition-all ${
+                  selectedId === instrument.id
+                    ? "border-yellow-400 bg-gray-900/80"
+                    : "border-gray-700 bg-gray-900/60 hover:border-gray-600"
                 }`}
-                onClick={() => setSelectedInstrument(instrument.id)}
+                onClick={() => handleSelectInstrument(instrument.id)}
               >
-                {/* Instrument Image */}
-                <div className="w-full h-48 bg-gray-800 overflow-hidden">
-                  {instrument.imageUrl ? (
+                <div className="p-6">
+                  {instrument.imageUrl && (
                     <img
                       src={instrument.imageUrl}
                       alt={instrument.name}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      className="w-full h-48 object-cover rounded-lg mb-4"
                     />
-                  ) : (
-                    <div className="flex items-center justify-center h-full bg-gradient-to-br from-gray-700 to-gray-800">
-                      <span className="text-5xl">🎵</span>
-                    </div>
                   )}
-                </div>
 
-                {/* Instrument Info */}
-                <div className="p-6">
                   <h2 className="text-2xl font-bold text-white mb-2">{instrument.name}</h2>
-                  <p className="text-gray-400 text-sm mb-4">{instrument.description}</p>
+                  <p className="text-gray-400 text-sm mb-4">{instrument.type.toUpperCase()}</p>
+                  <p className="text-gray-300 text-sm">{instrument.description}</p>
 
-                  {/* FAQ Accordion */}
-                  <Accordion type="single" collapsible className="w-full">
-                    {instrument.faqContent?.faq?.map((faq, idx) => (
-                      <AccordionItem key={idx} value={`${instrument.id}-faq-${idx}`}>
-                        <AccordionTrigger className="text-sm text-gray-300 hover:text-white py-2">
-                          {faq.question}
-                        </AccordionTrigger>
-                        <AccordionContent className="text-gray-400 text-sm pb-3">
-                          {faq.answer}
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-
-                  {/* Selection Indicator */}
-                  {selectedInstrument === instrument.id && (
+                  {selectedId === instrument.id && (
                     <div className="mt-4 pt-4 border-t border-gray-700">
                       <span className="text-yellow-400 font-semibold">✓ Selecionado</span>
                     </div>
@@ -141,23 +124,20 @@ export default function SelectInstrument() {
             ))}
           </div>
 
-          {/* Confirm Button */}
           <div className="flex gap-4 justify-center">
             <Button
+              onClick={() => router.push("/home")}
               variant="outline"
-              size="lg"
-              className="border-gray-600 text-gray-300 hover:bg-gray-800"
-              onClick={() => router.back()}
+              className="border-gray-600 text-gray-300 hover:bg-gray-800 px-8 py-6 text-lg"
             >
               Voltar
             </Button>
             <Button
-              size="lg"
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold disabled:opacity-50"
               onClick={handleConfirm}
-              disabled={!selectedInstrument}
+              disabled={!selectedId}
+              className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-8 py-6 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Confirmar Instrumento
+              Confirmar Seleção
             </Button>
           </div>
         </div>

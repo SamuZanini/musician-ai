@@ -222,7 +222,11 @@ export default function PracticeArea() {
                   >
                     Começar Sessão de Prática
                   </Button>
-                  <Button variant="outline" className="w-full border-gray-600 text-gray-300 hover:bg-gray-800 py-6">
+                  <Button 
+                    onClick={() => router.push("/practice-history")}
+                    variant="outline" 
+                    className="w-full border-gray-600 text-gray-300 hover:bg-gray-800 py-6"
+                  >
                     Ver Histórico
                   </Button>
                 </div>
